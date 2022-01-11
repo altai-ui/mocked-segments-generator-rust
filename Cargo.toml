@@ -1,0 +1,15 @@
+[package]
+name = "mocked-segment-generator"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[dependencies]
+requestty = "0.2.1"
+indicatif = "0.16.2"
+uuid = { version = "0.8.2", features = ["v4"] }
+md5 = "0.7.0"
+sha2 = "0.10.0"
+rand = "0.8.4"
+chrono = "0.4.19"
+fake = { version = "2.4.3", features = ['http','uuid'] }
