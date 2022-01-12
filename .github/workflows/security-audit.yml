@@ -5,12 +5,14 @@ on:
     - cron: "0 8 * * *"
 
   push:
+    branches:
+      - main
     paths:
       - "**/Cargo.*"
 
   pull_request:
-    branches:
-      - main
+    paths:
+      - "**/Cargo.*"
 
 jobs:
   security_audit:
