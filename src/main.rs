@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
         file_name = "<date>_<type>_<count>.txt".to_string()
     }
 
-    file_name = file_name.replacen("<date>", &chrono::Local::now().to_rfc3339().to_string(), 1);
+    file_name = file_name.replacen("<date>", &chrono::Local::now().to_rfc3339(), 1);
     file_name = file_name.replacen("<type>", get_name_by_type(quiz_result.data_type), 1);
     file_name = file_name.replacen("<count>", &format!("{}", line_count), 1);
 
