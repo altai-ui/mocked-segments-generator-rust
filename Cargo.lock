@@ -280,7 +280,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mocked-segment-generator"
+name = "mocked-segments-generator"
 version = "0.1.0"
 dependencies = [
  "chrono",
