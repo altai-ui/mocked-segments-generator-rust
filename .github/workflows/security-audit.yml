@@ -13,8 +13,19 @@ on:
       - main
 
 jobs:
-  security_audit:
+  security_audit_linux:
+    name: Audit on Linux
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  security_audit_macos:
+    name: Audit on macOS
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
 
