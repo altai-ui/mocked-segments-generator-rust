@@ -36,15 +36,11 @@ fn main() -> std::io::Result<()> {
 
     let mut file_name = quiz_result.name;
 
-    if file_name.len() == 0 {
+    if file_name.is_empty() {
         file_name = "<date>_<type>_<count>.txt".to_string()
     }
 
-    file_name = file_name.replacen(
-        "<date>",
-        &format!("{}", chrono::Local::now().to_rfc3339()),
-        1,
-    );
+    file_name = file_name.replacen("<date>", &chrono::Local::now().to_rfc3339().to_string(), 1);
     file_name = file_name.replacen("<type>", get_name_by_type(quiz_result.data_type), 1);
     file_name = file_name.replacen("<count>", &format!("{}", line_count), 1);
 
@@ -61,7 +57,7 @@ fn main() -> std::io::Result<()> {
     for n in 1..line_count + 1 {
         let line = get_line_by_type(quiz_result.data_type);
         pb.set_position((n * line_bytes_count).try_into().unwrap());
-        file.write(format!("{}\n", line).as_bytes())?;
+        file.write_all(format!("{}\n", line).as_bytes())?;
     }
 
     Ok(())
