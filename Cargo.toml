@@ -1,5 +1,10 @@
 [package]
 name = "mocked-segments-generator"
+homepage = "https://github.com/Qvant-lab/mocked-segments-generator-rust"
+documentation = "https://github.com/Qvant-lab/mocked-segments-generator-rust"
+repository = "https://github.com/Qvant-lab/mocked-segments-generator-rust"
+keywords = ["cli", "terminal"]
+categories = ["command-line-utilities"]
 version = "0.1.0"
 license = "MIT OR Apache-2.0"
 edition = "2021"
