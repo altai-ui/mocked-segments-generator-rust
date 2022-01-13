@@ -1,0 +1,30 @@
+name: Audit check
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+
+  push:
+    branches:
+      - main
+    paths:
+      - "**/Cargo.*"
+
+  pull_request:
+    paths:
+      - "**/Cargo.*"
+
+jobs:
+  audit_check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    name: Audit check on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
