@@ -7,25 +7,24 @@ on:
 
 jobs:
   publish:
-    name: Publish for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        name: [linux, windows, macos]
-
         include:
           - name: linux
             os: ubuntu-latest
-            artifact_name: target/release/<name>
-            asset_name: <name>-linux
+            artifact_name: target/release/mocked-segments-generator
+            asset_name: mocked-segments-generator-linux
           - name: windows
             os: windows-latest
-            artifact_name: target/release/<name>.exe
-            asset_name: <name>-windows
+            artifact_name: target/release/mocked-segments-generator.exe
+            asset_name: mocked-segments-generator-windows
           - name: macos
             os: macos-latest
-            artifact_name: target/release/<name>
-            asset_name: <name>-macos
+            artifact_name: target/release/mocked-segments-generator
+            asset_name: mocked-segments-generator-macos
+
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v1
