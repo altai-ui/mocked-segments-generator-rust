@@ -13,3 +13,8 @@ sha2 = "0.10.0"
 rand = "0.8.4"
 chrono = "0.4.19"
 fake = { version = "2.4.3", features = ['http','uuid'] }
+
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "mosege"
