@@ -42,3 +42,9 @@ jobs:
         with:
           name: ${{ matrix.asset_name }}
           path: ${{ matrix.artifact_name }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ matrix.artifact_name }}
+          fail_on_unmatched_files: true
