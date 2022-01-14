@@ -3,7 +3,7 @@ use rand::RngCore;
 use indicatif::{ProgressBar, ProgressStyle};
 use requestty::{Answers, Question};
 
-use std::fs::File;
+use std::fs::{rename, File};
 use std::io::prelude::*;
 
 use fake::faker::internet::raw::FreeEmail;
@@ -19,18 +19,15 @@ use uuid::Uuid;
 fn main() -> std::io::Result<()> {
     let quiz_result = call_quiz();
 
-    let line_count;
-
-    let line = get_line_by_type(quiz_result.data_type);
-    let line_bytes_count = line.len() as i64 + 1;
+    let mut is_limit_by_count = true;
+    let file_limit: u64;
 
     let result = quiz_result.count;
     match result {
-        Some(count) => line_count = count,
+        Some(count) => file_limit = count.try_into().unwrap(),
         None => {
-            let size = quiz_result.size.unwrap();
-
-            line_count = size / line_bytes_count
+            is_limit_by_count = false;
+            file_limit = quiz_result.size.unwrap().try_into().unwrap();
         }
     }
 
@@ -42,23 +39,54 @@ fn main() -> std::io::Result<()> {
 
     file_name = file_name.replacen("<date>", &chrono::Local::now().to_rfc3339(), 1);
     file_name = file_name.replacen("<type>", get_name_by_type(quiz_result.data_type), 1);
-    file_name = file_name.replacen("<count>", &format!("{}", line_count), 1);
 
-    let mut file = File::create(file_name)?;
+    let mut file = File::create(&file_name)?;
 
-    let pb = ProgressBar::new((line_bytes_count * line_count).try_into().unwrap());
+    let pb = ProgressBar::new(file_limit.try_into().unwrap());
+
+    let bar_template = if is_limit_by_count {
+        "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos} / {len} ({eta})"
+    } else {
+        "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {decimal_bytes}/{decimal_total_bytes} ({eta})"
+    };
 
     pb.set_style(
         ProgressStyle::default_bar()
-            .template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {decimal_bytes}/{decimal_total_bytes} ({eta})")
+            .template(bar_template)
             .progress_chars("#>-"),
     );
 
-    for n in 1..line_count + 1 {
+    let mut file_line_count: u64 = 0;
+    let mut file_size: u64 = 0;
+
+    loop {
         let line = get_line_by_type(quiz_result.data_type);
-        pb.set_position((n * line_bytes_count).try_into().unwrap());
+        let line_bytes = format!("{}\n", line);
+        let line_bytes_count: u64 = line_bytes.len().try_into().unwrap();
+
+        file_line_count += 1;
+        file_size += line_bytes_count;
+
+        if (is_limit_by_count && file_line_count > file_limit)
+            || (!is_limit_by_count && file_size > file_limit)
+        {
+            file_line_count -= 1;
+            break;
+        }
+
+        let increment = if is_limit_by_count {
+            1
+        } else {
+            line_bytes_count
+        };
+
+        pb.inc(increment);
+
         file.write_all(format!("{}\n", line).as_bytes())?;
     }
+
+    let new_file_name = file_name.replacen("<count>", &format!("{}", file_line_count), 1);
+    rename(file_name, new_file_name)?;
 
     Ok(())
 }
