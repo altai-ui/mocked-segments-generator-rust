@@ -119,6 +119,8 @@ fn call_quiz() -> QuizResult {
                 "MD5",
                 "SHA256",
                 "Телефонные номера",
+                "Телефонные номера - MD5",
+                "Телефонные номера - SHA256",
                 "Электронные почты",
                 "MAC-адреса",
             ])
@@ -159,8 +161,10 @@ fn get_name_by_type(key: usize) -> &'static str {
         1 => "md5",
         2 => "sha256",
         3 => "msisdn",
-        4 => "email",
-        5 => "mac",
+        4 => "msisdn_md5",
+        5 => "msisdn_sha256",
+        6 => "email",
+        7 => "mac",
         _ => unreachable!(),
     }
 }
@@ -174,9 +178,19 @@ fn get_line_by_type(key: usize) -> String {
             hasher.update(Uuid::new_v4().as_bytes());
             format!("{:x}", hasher.finalize())
         }
-        3 => NumberWithFormat(EN, "7##########").fake(),
-        4 => FreeEmail(EN).fake(),
+        3 => NumberWithFormat(EN, "79#########").fake(),
+        4 => {
+            let msisdn: String = NumberWithFormat(EN, "79#########").fake();
+            format!("{:?}", md5::compute(msisdn.as_bytes()))
+        }
         5 => {
+            let mut hasher = Sha256::new();
+            let msisdn: String = NumberWithFormat(EN, "79#########").fake();
+            hasher.update(msisdn.as_bytes());
+            format!("{:x}", hasher.finalize())
+        }
+        6 => FreeEmail(EN).fake(),
+        7 => {
             let mut octets: [u8; 6] = [0; 6];
             thread_rng().fill_bytes(&mut octets);
             format!(
