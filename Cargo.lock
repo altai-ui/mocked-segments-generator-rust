@@ -138,7 +138,7 @@ checksum = "21a8531dd3a64fd1cfbe92fad4160bc2060489c6195fe847e045e5788f710bae"
 dependencies = [
  "http",
  "rand",
- "uuid",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -290,7 +290,7 @@ dependencies = [
  "rand",
  "requestty",
  "sha2",
- "uuid",
+ "uuid 1.0.0",
 ]
 
 [[package]]
@@ -608,6 +608,15 @@ dependencies = [
  "getrandom",
  "md5",
  "sha1",
+]
+
+[[package]]
+name = "uuid"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8cfcd319456c4d6ea10087ed423473267e1a071f3bc0aa89f80d60997843c6f0"
+dependencies = [
+ "getrandom",
 ]
 
 [[package]]

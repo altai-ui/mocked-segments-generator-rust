@@ -12,7 +12,7 @@ edition = "2021"
 [dependencies]
 requestty = "0.2.1"
 indicatif = "0.16.2"
-uuid = { version = "0.8.2", features = ["v4"] }
+uuid = { version = "1.0.0", features = ["v4"] }
 md5 = "0.7.0"
 sha2 = "0.10.2"
 rand = "0.8.4"
