@@ -16,7 +16,7 @@ uuid = { version = "0.8.2", features = ["v4"] }
 md5 = "0.7.0"
 sha2 = "0.10.2"
 rand = "0.8.4"
-chrono = "0.4.19"
+chrono = "0.4.20"
 fake = { version = "2.4.3", features = ['http','uuid'] }
 
 [[bin]]
